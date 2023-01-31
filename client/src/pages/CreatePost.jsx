@@ -14,7 +14,37 @@ const CreatePost = () => {
 	const [generatingImg, setGeneratingImg] = useState(false); // will be used while making contact with the api and waiting to get the image back
 	const [loading, setLoading] = useState(false);
 
-	const generateImage = () => {};
+	//function that sends prompt to back end
+	const generateImage = async () => {
+		if (form.prompt) {
+			//if we have a promt
+			try {
+				setGeneratingImg(true); //set the image generating state to be true
+
+				//code to send a post to the back end
+				const response = await fetch("http://localhost:8080/api/v1/dalle", {
+					// go to this api and submit the following info
+					method: "POST", //method type
+					headers: {
+						"Content-Type": "application/json", //content type being passed
+					},
+					body: JSON.stringify({ prompt: form.prompt }), //convert body of the post into a json string
+				});
+
+				//parse the photo data from the backend set the data received back from the post to equal "data"
+				const data = await response.json();
+
+				//update the form on the page, which is a state changing function. Something's about to get rendered!
+				setForm({ ...form, photo: `data:image/jpeg;base64,${data.photo}` });
+			} catch (error) {
+				alert(error);
+			} finally {
+				setGeneratingImg(false);
+			}
+		} else {
+			alert("please enter a promt");
+		}
+	};
 
 	const handleSubmit = () => {};
 
