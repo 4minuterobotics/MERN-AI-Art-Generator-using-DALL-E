@@ -46,7 +46,36 @@ const CreatePost = () => {
 		}
 	};
 
-	const handleSubmit = () => {};
+	//function that takes the generated form data and submits it to the back end
+	//since it's doing data fetching, make it asyncronous
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+
+		if (form.prompt && form.photo) {
+			//check to see if the form has a prompt and photo before continuing
+			setLoading(true); //state changing function. something's getting rendered
+
+			try {
+				//send post request to the following api, containing the following parameters
+				const response = await fetch("http://localhost:8080/api/v1/post", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify(form),
+				});
+
+				await response.json(); //this means we got the response successfuly
+				navigate("/"); //navigate back to the home page
+			} catch (error) {
+				alert(error);
+			} finally {
+				setLoading(false);
+			}
+		} else {
+			alert("please enter a prompt and generate an image"); //this alert pops up if the submit button is hit but no prompt or image is yet generated
+		}
+	};
 
 	//sends data from the form on the front end to the back end
 	const handleChange = (e) => {
