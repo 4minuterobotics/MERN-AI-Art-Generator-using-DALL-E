@@ -21,7 +21,7 @@ const CreatePost = () => {
 			try {
 				setGeneratingImg(true); //set the image generating state to be true
 
-				//code to send a post to the back end
+				//code to send a post request to the dalle back end
 				const response = await fetch("http://localhost:8080/api/v1/dalle", {
 					// go to this api and submit the following info
 					method: "POST", //method type
