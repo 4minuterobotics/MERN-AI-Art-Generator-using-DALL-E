@@ -2,6 +2,7 @@ import React, { useState, useEffect, Fragment } from "react";
 
 import { Loader, Card, FormField } from "../components";
 
+//this function maps out cards
 const RenderCards = ({ data, title }) => {
 	if (data?.length > 0) {
 		return data.map((post) => <Card key={post._id} {...post} />); ///////////////
@@ -15,6 +16,35 @@ const Home = () => {
 	const [allPosts, setAllPosts] = useState(null);
 
 	const [searchText, setSearchText] = useState("");
+
+	//upon rendering this component, this function makes a get request to the backend api for all the photos and prompts ever posted in mongo and cloudinary
+	useEffect(() => {
+		//api that gets data from posts
+		const fetchPosts = async () => {
+			setLoading(true);
+			try {
+				const response = await fetch("http://localhost:8080/api/v1/post", {
+					method: "GET",
+					headers: {
+						"Content-Type": "appplication.json",
+					},
+				});
+
+				//if there's a response back....
+				if (response.ok) {
+					const result = await response.json(); //save the response (our posts) as 'result'
+
+					setAllPosts(result.data.reverse()); //call the state function to render the components with their data
+				}
+			} catch (error) {
+				alert(error);
+				console.log(error);
+			} finally {
+				setLoading(false);
+			}
+		};
+		fetchPosts();
+	}, []); //dependency array is created and left empty, causing this function to only run the first time the component is rendered
 
 	return (
 		<section className="max-w-7xl mx-auto">
@@ -44,7 +74,7 @@ const Home = () => {
 							{searchText ? (
 								<RenderCards data={[]} title="No search results found" />
 							) : (
-								<RenderCards data={[]} title="No posts found" />
+								<RenderCards data={[allPosts]} title="No posts found" />
 							)}
 						</div>
 					</>

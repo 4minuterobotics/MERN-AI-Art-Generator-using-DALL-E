@@ -26,7 +26,7 @@ router.route("/").get(async (req, res) => {
 	}
 });
 
-//CREATE A POST ON CLOUDINARY USING DATA FROM THE FORM FROM FRONT END and store the link in the mongodb Database
+//CREATE A POST ON CLOUDINARY USING DATA FROM THE FROM FRONT END and store the link in the mongodb Database
 router.route("/").post(async (req, res) => {
 	try {
 		const { name, prompt, photo } = req.body; //get the body of the form containing the photo, prompt, and name

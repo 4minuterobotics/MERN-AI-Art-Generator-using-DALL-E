@@ -50,11 +50,9 @@ const CreatePost = () => {
 	//since it's doing data fetching, make it asyncronous
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-
 		if (form.prompt && form.photo) {
 			//check to see if the form has a prompt and photo before continuing
 			setLoading(true); //state changing function. something's getting rendered
-
 			try {
 				//send post request to the following api, containing the following parameters
 				const response = await fetch("http://localhost:8080/api/v1/post", {
@@ -64,11 +62,11 @@ const CreatePost = () => {
 					},
 					body: JSON.stringify(form),
 				});
-
 				await response.json(); //this means we got the response successfuly
 				navigate("/"); //navigate back to the home page
 			} catch (error) {
 				alert(error);
+				alert("came from create post page");
 			} finally {
 				setLoading(false);
 			}
