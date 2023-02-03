@@ -11,13 +11,14 @@ const router = express.Router();
 // all the access codes necessary to post to cloudinary
 cloudinary.config({
 	cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-	cloud_key: process.env.CLOUDINARY_API_KEY,
-	cloud_secret: process.env.CLOUDINARY_API_SECRET,
+	api_key: process.env.CLOUDINARY_API_KEY,
+	api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
 //GET ALL POSTS FROM CLOUDINARY
 router.route("/").get(async (req, res) => {
 	try {
+		console.log("generating a photo");
 		const posts = await Post.find({});
 
 		res.status(200).json({ success: true, data: posts });
@@ -28,10 +29,13 @@ router.route("/").get(async (req, res) => {
 
 //CREATE A POST ON CLOUDINARY USING DATA FROM THE FROM FRONT END and store the link in the mongodb Database
 router.route("/").post(async (req, res) => {
+	console.log("about to make a new document i think");
+
 	try {
 		const { name, prompt, photo } = req.body; //get the body of the form containing the photo, prompt, and name
-		const photoUrl = await cloudinary.uploader.upload(photo); //upload the photo to cloudinary and create a link to it
 
+		const photoUrl = await cloudinary.uploader.upload(photo); //upload the photo to cloudinary and create a link to it
+		console.log("made it past body cloudinay upload");
 		const newPost = await Post.create({
 			//add the data from and the cloudinary link to mongo database
 			name,
@@ -40,8 +44,11 @@ router.route("/").post(async (req, res) => {
 		});
 
 		res.status(201).json({ success: true, data: newPost });
+		console.log("the newPost._id is");
+		console.log(newPost._id);
 	} catch (error) {
 		res.status(500).json({ success: false, message: error });
+		console.log("response from database save is an error");
 	}
 });
 export default router;

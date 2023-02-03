@@ -2,26 +2,43 @@ import React, { useState, useEffect, Fragment } from "react";
 
 import { Loader, Card, FormField } from "../components";
 
+let position = 0;
+
 //this function maps out cards
 const RenderCards = ({ data, title }) => {
+	console.log("Render homepage 3: began rendering cards with mapping");
 	if (data?.length > 0) {
-		return data.map((post) => <Card key={post._id} {...post} />); ///////////////
+		console.log("the length of data is:");
+		console.log(data.length);
+		console.log("the value of data is:");
+		console.log(data);
+		//each card is mapped, given an id, and given all the values each post has (name, prompt, photo)
+		return data.map((post) => <Card key={post._id} {...post} />);
 	}
-
+	console.log("Render homepage 4: Exiting card mapping");
 	return <h2 className="mt-5 font-bold text[#6449ff] text-xl uppercase">{title}</h2>;
 };
 
 const Home = () => {
-	const [loading, setLoading] = useState(false);
-	const [allPosts, setAllPosts] = useState(null);
+	console.log("Starting at the top of home component");
+	//console.log(allPosts);
 
+	const [loading, setLoading] = useState(false);
+	const [allPosts, setAllPosts] = useState([]);
 	const [searchText, setSearchText] = useState("");
 
+	console.log("the value of allPosts is:");
+	console.log(allPosts);
+	console.log("the length of allPosts is:");
+	console.log(allPosts.length);
 	//upon rendering this component, this function makes a get request to the backend api for all the photos and prompts ever posted in mongo and cloudinary
 	useEffect(() => {
+		console.log("began useEffect");
 		//api that gets data from posts
 		const fetchPosts = async () => {
 			setLoading(true);
+			console.log("state changed. this will cause the page to re-render at 'Starting at top...'");
+			console.log("fetching posts");
 			try {
 				const response = await fetch("http://localhost:8080/api/v1/post", {
 					method: "GET",
@@ -32,12 +49,17 @@ const Home = () => {
 
 				//if there's a response back....
 				if (response.ok) {
+					console.log("got something back from fetch");
 					const result = await response.json(); //save the response (our posts) as 'result'
 
+					console.log(`we got back the following: ${result}`);
+
+					console.log(result);
 					setAllPosts(result.data.reverse()); //call the state function to render the components with their data
 				}
 			} catch (error) {
 				alert(error);
+				console.log("got nothing back from fetch");
 				console.log(error);
 			} finally {
 				setLoading(false);
@@ -46,6 +68,7 @@ const Home = () => {
 		fetchPosts();
 	}, []); //dependency array is created and left empty, causing this function to only run the first time the component is rendered
 
+	console.log("Render homepage start");
 	return (
 		<section className="max-w-7xl mx-auto">
 			<div>
@@ -62,6 +85,7 @@ const Home = () => {
 				{loading ? (
 					<div className="flex justify-center items-center">
 						<Loader />
+						{console.log("loading state change caused loader to render")}
 					</div>
 				) : (
 					<>
@@ -70,16 +94,18 @@ const Home = () => {
 								Showing results for <span className="text-[#222328]">{searchText}</span>
 							</h2>
 						)}
+						{console.log("Render homepage2: render cards")}
 						<div className="grid lg:grid-cols-4 sm:grid-cols-3 xs:grid-cols-2 grid-cols-1 gap-3">
 							{searchText ? (
 								<RenderCards data={[]} title="No search results found" />
 							) : (
-								<RenderCards data={[allPosts]} title="No posts found" />
+								<RenderCards data={allPosts} title="No posts found" />
 							)}
 						</div>
 					</>
 				)}
 			</div>
+			{console.log("exiting html way at the bottom")}
 		</section>
 	);
 };

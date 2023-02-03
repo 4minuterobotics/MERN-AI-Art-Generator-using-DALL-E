@@ -38,7 +38,6 @@ router.route("/").post(async (req, res) => {
 		//this will pass the photo that was just saved as "image" as the response back to the user in json
 		res.status(200).json({ photo: image });
 	} catch (error) {
-		console.log(error);
 		res.status(500).send(error?.response.data.error.message);
 	}
 });
