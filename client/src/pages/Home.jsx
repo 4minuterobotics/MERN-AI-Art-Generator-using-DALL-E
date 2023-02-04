@@ -25,7 +25,10 @@ const Home = () => {
 
 	const [loading, setLoading] = useState(false);
 	const [allPosts, setAllPosts] = useState([]);
+
 	const [searchText, setSearchText] = useState("");
+	const [searchedResults, setSearchedResults] = useState(null);
+	const [searchTimeout, setSearchTimeout] = useState(null);
 
 	console.log("the value of allPosts is:");
 	console.log(allPosts);
@@ -68,6 +71,23 @@ const Home = () => {
 		fetchPosts();
 	}, []); //dependency array is created and left empty, causing this function to only run the first time the component is rendered
 
+	const handleSearchChange = (e) => {
+		console.log("about to clear a timeout that's currently set to null");
+		clearTimeout(searchTimeout);
+		console.log("just cleared a timeout that was set to null");
+		console.log(e.target.value);
+		setSearchText(e.target.value);
+		setSearchTimeout(
+			setTimeout(() => {
+				const searchedResults = allPosts.filter(
+					(item) =>
+						item.name.toLowerCase().includes(searchText.toLowerCase()) ||
+						item.prompt.toLowerCase().includes(searchText.toLowerCase())
+				);
+				setSearchedResults(searchedResults);
+			}, 500)
+		);
+	};
 	console.log("Render homepage start");
 	return (
 		<section className="max-w-7xl mx-auto">
@@ -78,7 +98,14 @@ const Home = () => {
 				</p>
 			</div>
 			<div className="mt-16">
-				<FormField />
+				<FormField
+					LabelName="Search Posts"
+					type="text"
+					name="text"
+					placeholder="Search posts"
+					value={searchText}
+					handleChange={handleSearchChange}
+				/>
 			</div>
 
 			<div className="mt-10">
@@ -97,7 +124,7 @@ const Home = () => {
 						{console.log("Render homepage2: render cards")}
 						<div className="grid lg:grid-cols-4 sm:grid-cols-3 xs:grid-cols-2 grid-cols-1 gap-3">
 							{searchText ? (
-								<RenderCards data={[]} title="No search results found" />
+								<RenderCards data={searchedResults} title="No search results found" />
 							) : (
 								<RenderCards data={allPosts} title="No posts found" />
 							)}
