@@ -43,7 +43,7 @@ const Home = () => {
 			console.log("state changed. this will cause the page to re-render at 'Starting at top...'");
 			console.log("fetching posts");
 			try {
-				const response = await fetch("http://localhost:8081/api/v1/post", {
+				const response = await fetch("https://image-generator-backend-c9nm.onrender.com/api/v1/post", {
 					method: "GET",
 					headers: {
 						"Content-Type": "appplication.json",

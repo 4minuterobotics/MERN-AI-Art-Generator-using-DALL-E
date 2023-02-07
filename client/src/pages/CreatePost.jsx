@@ -22,7 +22,7 @@ const CreatePost = () => {
 				setGeneratingImg(true); //set the image generating state to be true
 				console.log("line beore error");
 				//code to send a post request to the dalle back end
-				const response = await fetch("http://localhost:8081/api/v1/dalle", {
+				const response = await fetch("https://image-generator-backend-c9nm.onrender.com/api/v1/dalle", {
 					// go to this api and submit the following info
 					method: "POST", //method type
 					headers: {
@@ -55,7 +55,7 @@ const CreatePost = () => {
 			setLoading(true); //state changing function. changing this causes the "generate" button to re-render saying "generating..."
 			try {
 				//send post request to the following api, containing the following parameters
-				const response = await fetch("http://localhost:8081/api/v1/post", {
+				const response = await fetch("https://image-generator-backend-c9nm.onrender.com/api/v1/post", {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json",
