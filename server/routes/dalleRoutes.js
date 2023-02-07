@@ -4,7 +4,7 @@ import { Configuration, OpenAIApi } from "openai";
 
 dotenv.config();
 
-const router = express.Router();
+const dalleRoutes = express.Router();
 
 const configuration = new Configuration({
 	apiKey: process.env.OPENAI_API_KEY,
@@ -13,13 +13,13 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 //this dummy route was created to see if we had a connection with open AI by going to localhost:8080/api/v1/dalle
-router.route("/").get((req, res) => {
+dalleRoutes.route("/").get((req, res) => {
 	res.send("Hello from dalle!");
 	console.log("connected to dalle");
 });
 
 //this is the actual post to be sent to dalle for it to interpret and use to send an image back
-router.route("/").post(async (req, res) => {
+dalleRoutes.route("/").post(async (req, res) => {
 	try {
 		//this prompt will come from the front end side
 		const { prompt } = req.body;
@@ -41,4 +41,4 @@ router.route("/").post(async (req, res) => {
 		res.status(500).send(error?.response.data.error.message);
 	}
 });
-export default router;
+export default dalleRoutes;

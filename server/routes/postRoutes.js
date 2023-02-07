@@ -6,7 +6,7 @@ import Post from "../mongodb/models/post.js";
 
 dotenv.config();
 
-const router = express.Router();
+const postRoutes = express.Router();
 
 // all the access codes necessary to post to cloudinary
 cloudinary.config({
@@ -16,7 +16,7 @@ cloudinary.config({
 });
 
 //GET ALL POSTS FROM CLOUDINARY
-router.route("/").get(async (req, res) => {
+postRoutes.route("/").get(async (req, res) => {
 	try {
 		console.log("generating a photo");
 		const posts = await Post.find({});
@@ -28,7 +28,7 @@ router.route("/").get(async (req, res) => {
 });
 
 //CREATE A POST ON CLOUDINARY USING DATA FROM THE FROM FRONT END and store the link in the mongodb Database
-router.route("/").post(async (req, res) => {
+postRoutes.route("/").post(async (req, res) => {
 	console.log("about to make a new document i think");
 
 	try {
@@ -51,4 +51,4 @@ router.route("/").post(async (req, res) => {
 		console.log("response from database save is an error");
 	}
 });
-export default router;
+export default postRoutes;

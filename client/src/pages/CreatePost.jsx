@@ -37,7 +37,7 @@ const CreatePost = () => {
 				//update the form on the page, which is a state changing function. This will cause the generated picture to render!
 				setForm({ ...form, photo: `data:image/jpeg;base64,${data.photo}` });
 			} catch (error) {
-				alert(error);
+				alert`CreatePost ${error}`;
 			} finally {
 				setGeneratingImg(false);
 			}
